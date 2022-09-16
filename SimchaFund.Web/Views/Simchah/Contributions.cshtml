@@ -1,0 +1,72 @@
+﻿@model ViewModel
+@if (!String.IsNullOrEmpty(@Model.Message))
+{
+    <div class="col-md-12">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @Model.Message
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+    </div>
+}
+
+        <div class="header">
+            <h1>
+                Contributors for the
+                @Model.Name simcha
+            </h1>
+        </div>
+        <div class="table-responsive">
+            <form method="POST" action="/contributors/updatecontributions">
+                <input type="hidden" name="simchaId" value="@Model.Id" />
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Contribute</th>
+                        <th>Name</th>
+                        <th>Balance</th>
+                        <th>Always Include</th>
+                        <th>Amount</th>
+                    </tr>
+                    @{int i = 0;}
+                    @foreach (var c in @Model.Contributor)
+                    {
+                        <input type="hidden" name="contributor[@i].ContributorId" value=@c.ID />
+                        <tr>
+                            <td>
+                                @if (c.AlwaysInclude)
+                                {
+                                    <input class="contribute" type="checkbox" name="contributors[@i].Include" checked="checked" value="true" />
+                                }
+                                else
+                                {
+                                    <input class="contribute" type="checkbox" name="contributors[@i].Include" value="true" />
+                                }
+                            </td>
+
+
+                            <td>@c.FirstName  @c.LastName</td>
+                            <td>@c.Balance.ToString("c")</td>
+
+                            <td style="text-align: center;">
+                                @if (@c.AlwaysInclude)
+                                {
+
+                                    <span style="font-size: 25px;" class="oi oi-check"></span>
+
+                                }
+                            </td>
+
+                            <td>
+                                <input type="text" name="contributors[@i].amount" class="form-control" value="5.00" />
+                            </td>
+                        </tr>
+                        { i++; }
+                    }
+                </table>
+                <div style="text-align:center;">
+                    <button class="btn-lg btn-danger">Update</button>
+                </div>
+            </form>
+        </div>
+
